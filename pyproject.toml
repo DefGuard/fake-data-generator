@@ -6,6 +6,11 @@ authors = ["Jacek Chmielewski <jchmielewski@teonite.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+Faker = "^15.3.4"
+SQLAlchemy = "^1.4.44"
+psycopg2 = "^2.9.5"
+click = "^8.1.3"
+tqdm = "^4.64.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
