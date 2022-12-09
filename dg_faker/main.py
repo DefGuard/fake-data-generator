@@ -69,13 +69,24 @@ def cli():
     pass
 
 
+def insert_items(connection, count, insert_item):
+    counter = 0
+    progress = tqdm(total=count)
+    while counter < count:
+        try:
+            insert_item(connection)
+            progress.update()
+            counter += 1
+        except:
+            pass
+
+
 @click.command("insert-users")
 @click.argument("database_url")
 @click.option("--count", default=1, help="How many users to insert")
 def insert_users(database_url: str, count: int):
     connection = connect_db(database_url)
-    for _ in tqdm(range(count)):
-        insert_user(connection)
+    insert_items(connection, count, insert_user)
 
 
 @click.command("insert-devices")
@@ -84,11 +95,12 @@ def insert_users(database_url: str, count: int):
 @click.option("--user-id", help="User for whom devices should be created")
 def insert_devices(database_url: str, count: int, user_id: int):
     connection = connect_db(database_url)
-    for _ in tqdm(range(count)):
-        insert_device(connection, user_id)
+    insert_items(connection, count, lambda conn: insert_device(conn, user_id))
+
 
 cli.add_command(insert_users)
 cli.add_command(insert_devices)
+
 
 if __name__ == "__main__":
     cli()
